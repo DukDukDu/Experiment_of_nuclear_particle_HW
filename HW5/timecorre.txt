@@ -1,0 +1,15 @@
+void TimeCorrection(TGraph *gb, TGraph *gc)
+{
+    double *y=gb->GetY();//将TGraph的y轴数值按顺序填入数组y;
+    gc->Clear();
+    double yc[250];
+    int xmax=TMath::LocMax(250,y);//TMath::LocMax(n,data),从data数组的0-n范围内找到最大值，返回最大值所在的数组索引数字
+    int dx=59-xmax;
+    for(int i=0;i<250;i++) {
+        if(i+dx<0 || i+dx>=250) yc[i]=0;//防止数组超界
+        else yc[i]=y[i+dx];
+        
+        if(i+dx>0 && i+dx<=250) gc->SetPoint(i+dx,i+dx,yc[i]);
+    }  
+    gc->SetTitle(gb->GetTitle());
+}
